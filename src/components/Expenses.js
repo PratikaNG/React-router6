@@ -1,11 +1,11 @@
-import React from 'react'
+// import React from 'react'
 
-const Expenses = () => {
-  return (
-    <div className='text-center'>
-      <h1>Expenses</h1>
-    </div>
-  )
-}
+// const Expenses = () => {
+//   return (
+//     <div className='text-center'>
+//       <h1>Expenses</h1>
+//     </div>
+//   )
+// }
 
-export default Expenses
+// export default Expenses
