@@ -1,9 +1,13 @@
-import { Link,NavLink, Outlet } from 'react-router-dom'
+import { Link,NavLink, Outlet,useNavigate } from 'react-router-dom'
 import { getInvoices } from './data'
 import { useParams } from "react-router-dom"
 import { getInvoice } from "./data"
+import  authConsumer from '../hooks/auth';
+
 
 export const Home = ()=>{
+    const [authed,dispatch] = authConsumer()
+    console.log(authed)
     return (
         <main>
             <h1 className='text-center my-3 bg-yellow-400 text-gray-700 w-40 mx-auto rounded'>Authentication</h1>
@@ -17,33 +21,55 @@ export const Home = ()=>{
 
 
 export const Nav = ()=>{
+
+    function ActiveLink(props) {
+        return <NavLink style={({isActive})=>{
+            return {
+                color:isActive ? "white":""
+            };
+        }}{...props}/>
+        
+    }
     return (
         <nav className='flex bg-indigo-600 text-black-50 gap-4 justify-center'>
-
-
-<Link to="/login">login</Link>
-
-<Link to="/invoice">Invoice</Link>
-<Link to="/expenses">expenses</Link>
+            <ActiveLink to="/">Home</ActiveLink>
+            <ActiveLink to="/login">login</ActiveLink>
+            <ActiveLink to="/invoice">Invoice</ActiveLink>
+            <ActiveLink to="/expenses">expenses</ActiveLink>
 
         </nav>
     )
 }
 
 export const Login = () =>{
+    const [authed,dispatch] = authConsumer()
+    console.log(authed)
+    let navigate = useNavigate()
     return (
         <main>
             <div>Login component</div>
+            <button className='border px-5 bg-indigo-500 text-gray-50 rounded' 
+            onClick={()=>{
+                dispatch({type:"login"})
+                navigate("/invoice",{replace:true})
+            }}
+            >Login</button>
         </main>
     )
 }
 
 export const Invoice = () => {
+    let auth = authConsumer()
+
   let invoices = getInvoices()
 //   let activeClassName = "text-red-500 bg-gray-200"
+const [,dispatch] = authConsumer()
+let navigate = useNavigate()
+
+   
 
     return(<main className='text-center my-3'>
-    <div className='flex flex-col gap-3  text-gray-700 w-40 mx-auto'>
+    <div className='flex flex-col gap-3  text-gray-700 w-40 mx-auto my-5'>
     {invoices.map(invoice=>(
       <NavLink
       //  style={({isActive})=>{
@@ -61,14 +87,31 @@ export const Invoice = () => {
       </NavLink>
     ))}
     </div>
-    
+    <button className='border px-5 bg-indigo-500 text-gray-50 rounded' 
+            onClick={()=>{
+                dispatch({type:"logout"})
+                navigate("/login",{replace:false})
+
+            }}
+            >Logout</button>
     <Outlet></Outlet>
   </main>)
 }
 
 export const Expenses=()=>{
+const [,dispatch] = authConsumer()
+
+let navigate = useNavigate()
+
     return(<div className='text-center'>
     <h1>Expenses</h1>
+    <button className='border px-5 bg-indigo-500 text-gray-50 rounded' 
+            onClick={()=>{
+                dispatch({type:"logout"})
+                navigate("/login",{replace:false})
+
+            }}
+            >Logout</button>
   </div>)
 
 }

@@ -7,6 +7,7 @@ import {BrowserRouter as Router,Routes,Route, useRoutes} from "react-router-dom"
 import Invoice from './components/Invoice';
 import Expenses from './components/Expenses';
 import Bills from './components/bills';
+import { AuthProvider } from './hooks/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -14,7 +15,9 @@ root.render(
  
   // type1*****************
   <Router>
+    <AuthProvider>
     <App/>
+    </AuthProvider>
       {/* <Routes> */}
         {/* <Route path='/' element={<App/>}> */}
 
