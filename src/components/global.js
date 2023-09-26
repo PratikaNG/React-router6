@@ -1,9 +1,9 @@
-import { Link,NavLink, Outlet,useNavigate } from 'react-router-dom'
+import { Link,NavLink, Outlet,useNavigate ,useLocation,Navigate} from 'react-router-dom'
 import { getInvoices } from './data'
 import { useParams } from "react-router-dom"
 import { getInvoice } from "./data"
 import  authConsumer from '../hooks/auth';
-
+import Route from "../routes/routes"
 
 export const Home = ()=>{
     const [authed,dispatch] = authConsumer()
@@ -22,6 +22,8 @@ export const Home = ()=>{
 
 export const Nav = ()=>{
 
+    const [{auth}] = authConsumer()
+    let [{children}] = Route
     function ActiveLink(props) {
         return <NavLink style={({isActive})=>{
             return {
@@ -33,9 +35,20 @@ export const Nav = ()=>{
     return (
         <nav className='flex bg-indigo-600 text-black-50 gap-4 justify-center'>
             <ActiveLink to="/">Home</ActiveLink>
-            <ActiveLink to="/login">login</ActiveLink>
-            <ActiveLink to="/invoice">Invoice</ActiveLink>
-            <ActiveLink to="/expenses">expenses</ActiveLink>
+            {
+children.map((value,i)=>(
+    // console.log(value.RouteName)
+    value.RouteName && value.protected === auth ?  <ActiveLink key={i} to={value.path}>{value.RouteName}</ActiveLink>:false
+))
+            }
+            {/* <ActiveLink to="/login">login</ActiveLink> */}
+            {/* {
+                auth?(
+<>
+                    <ActiveLink to="/invoice">Invoice</ActiveLink>
+                    <ActiveLink to="/expenses">expenses</ActiveLink></>
+                ):<></>
+            } */}
 
         </nav>
     )
@@ -43,7 +56,6 @@ export const Nav = ()=>{
 
 export const Login = () =>{
     const [authed,dispatch] = authConsumer()
-    console.log(authed)
     let navigate = useNavigate()
     return (
         <main>
@@ -129,4 +141,14 @@ export function Bills() {
             <p>Timings: {invoice.info.timing.text}</p>
         </main>
     )
-};
+}
+
+export function RequireAuth({children}){
+const [authed] = authConsumer() 
+const location = useLocation()
+    
+    return authed.auth === true ?(children) :(
+<Navigate to={"/login"} replace state={{path:location.pathname}}/>)
+   
+
+}
