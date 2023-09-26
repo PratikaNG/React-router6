@@ -17,11 +17,15 @@ const Invoice = () => {
       {invoices.map(invoice=>(
         <Link
         className='bg-gray-200'
-        to={`/invoices/${invoice.info.resId}`}
+        to={`/invoice/${invoice.info.resId}`}
         key={invoice.info.resId}
-        >{invoice.info.name}</Link>
+        target='_blank'
+        >{invoice.info.name}
+        
+        </Link>
       ))}
       </div>
+      <Outlet></Outlet>
     </main>
   )
 }
