@@ -15,8 +15,12 @@ root.render(
         <Route path='/' element={<App/>}>
           <Route path='/invoice' element={<Invoice/>}>
             <Route path='/invoice/123' element={<div>Bills</div>}/>
+
           </Route>
           <Route path='/expenses' element={<Expenses/>}/>
+          <Route path='*' element={<main className='text-center'>
+            <p className='text-3xl'>There is nothing here!</p>
+          </main>}/>
         </Route>
       </Routes>
   </Router>
